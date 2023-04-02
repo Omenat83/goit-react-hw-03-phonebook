@@ -8,13 +8,26 @@ import { Container, Title, TitleContact } from './App.styled';
 export class App extends Component {
   state = {
     contacts: [
-      { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
+    //   { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
+    //   { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
+    //   { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
+    //   { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
     ],
     filter: '',
   };
+
+  componentDidMount() {
+    const parsedContacts = JSON.parse(localStorage.getItem('contacts'));
+    if (parsedContacts) {
+      this.setState({ contacts: parsedContacts });
+    }
+  }
+
+  componentDidUpdate(prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
 
   createContact = data => {
     const newContact = {
@@ -33,8 +46,8 @@ export class App extends Component {
     this.setState({ [name]: value });
   };
 
-  filterData = contacts => {
-    const filteredArray = contacts.filter(contact =>
+  filterData = () => {
+    const filteredArray = this.state.contacts.filter(contact =>
       contact.name.toLowerCase().includes(this.state.filter.toLowerCase())
     );
     return filteredArray;
@@ -60,7 +73,7 @@ export class App extends Component {
           filterValue={this.state.filter}
         />
         <ContactList
-          contacts={this.filterData(this.state.contacts)}
+          contacts={this.filterData()}
           filter={this.state.filter}
           deleteContact={this.deleteContact}
         />

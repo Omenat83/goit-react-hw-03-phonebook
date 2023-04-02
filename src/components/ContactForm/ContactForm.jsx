@@ -19,7 +19,6 @@ export class ContactForm extends Component {
 
   onSubmit = e => {
     e.preventDefault();
-    console.log(this.props.contacts);
     const newName = this.state.name.toLocaleLowerCase();
 
     if (
